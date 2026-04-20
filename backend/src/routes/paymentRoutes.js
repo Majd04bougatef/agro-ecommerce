@@ -1,8 +1,11 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const { createPaymentIntent } = require('../services/stripeService');
 const { sendOrderConfirmation } = require('../services/emailService');
 const Order = require('../models/Order');
 const auth = require('../middleware/auth');
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 router.post('/create-payment-intent', auth, async (req, res) => {
   try {
@@ -12,6 +15,31 @@ router.post('/create-payment-intent', auth, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+router.post('/webhook', async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    
+    // Logique pour mettre à jour la commande et envoyer l'email
+    console.log('✅ Paiement reçu pour la session:', session.id);
+    // Ici on pourrait chercher la commande par metadata si Stripe Checkout est utilisé
+  }
+
+  res.json({ received: true });
 });
 
 router.post('/confirm', auth, async (req, res) => {
