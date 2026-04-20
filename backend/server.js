@@ -27,22 +27,25 @@ io.on('connection', (socket) => {
 app.use(cors());
 
 // Webhook Stripe doit avoir accès au body RAW (avant express.json())
+app.use('/api/webhook', express.raw({ type: 'application/json' }));
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
 
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB connecté'))
-  .catch(err => console.error('❌ Erreur MongoDB:', err));
+// Connexion MongoDB via config/db.js
+const connectDB = require('./src/config/db');
+connectDB();
 
 app.use('/api/auth', require('./src/routes/authRoutes'));
 app.use('/api/products', require('./src/routes/productRoutes'));
 app.use('/api/cart', require('./src/routes/cartRoutes'));
 app.use('/api/orders', require('./src/routes/orderRoutes'));
 app.use('/api/payments', require('./src/routes/paymentRoutes'));
+app.use('/api/webhook', require('./src/routes/webhookRoutes'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-server.listen(process.env.PORT, () => {
-  console.log(`🚀 Serveur démarré sur le port ${process.env.PORT}`);
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`🚀 Serveur démarré sur le port ${PORT}`);
 });

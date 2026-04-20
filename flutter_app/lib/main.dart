@@ -44,12 +44,15 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.green,
           useMaterial3: true,
         ),
-        home: isLoggedIn ? const HomeScreen() : const AuthScreen(),
         routes: {
+          '/': (ctx) => isLoggedIn
+              ? const HomeScreen()
+              : AuthScreen(onLoginSuccess: () => setState(() => isLoggedIn = true)),
           '/products': (ctx) => const ProductsScreen(),
           '/cart': (ctx) => const CartScreen(),
           '/checkout': (ctx) => const CheckoutScreen(),
-          '/auth': (ctx) => const AuthScreen(),
+          '/auth': (ctx) =>
+              AuthScreen(onLoginSuccess: () => setState(() => isLoggedIn = true)),
         },
       ),
     );

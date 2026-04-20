@@ -21,13 +21,16 @@ const CheckoutForm: React.FC<Props> = ({ orderId, onSuccess }) => {
 
     const { error: stripeError } = await stripe.confirmPayment({
       elements,
-      confirmParams: { return_url: `${window.location.origin}/order-success?orderId=${orderId}` },
+      confirmParams: {
+        return_url: `${window.location.origin}/order-success?orderId=${orderId}`,
+      },
     });
 
     if (stripeError) {
       setError(stripeError.message || 'Erreur de paiement');
       setLoading(false);
     } else {
+      // Stripe redirects to return_url; onSuccess is a fallback for non-redirect scenarios
       onSuccess();
     }
   };

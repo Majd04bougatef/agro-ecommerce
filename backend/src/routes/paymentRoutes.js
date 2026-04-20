@@ -33,10 +33,7 @@ router.post('/webhook', async (req, res) => {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    
-    // Logique pour mettre à jour la commande et envoyer l'email
-    console.log('✅ Paiement reçu pour la session:', session.id);
-    // Ici on pourrait chercher la commande par metadata si Stripe Checkout est utilisé
+    await sendOrderConfirmation(session.customer_email, session.metadata.orderId);
   }
 
   res.json({ received: true });

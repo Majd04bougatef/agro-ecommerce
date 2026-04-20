@@ -3,9 +3,7 @@ import 'dart:convert';
 import '../models/product.dart';
 
 class ApiService {
-  // Use 10.0.2.2 for Android Emulator, or your local IP for physical devices.
-  // Port 5001 is used temporarily.
-  static const String baseUrl = 'http://10.0.2.2:5001/api';
+  static const String baseUrl = 'http://192.168.100.159:5000/api';
   static String? token;
 
   static Future<List<Product>> getProducts({String? category}) async {

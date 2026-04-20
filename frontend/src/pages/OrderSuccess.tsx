@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { confirmPayment } from '../services/api';
 
 const OrderSuccess: React.FC = () => {
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('orderId');
+  const paymentIntentId = searchParams.get('payment_intent');
+  const [confirmed, setConfirmed] = useState(false);
+  const called = useRef(false);
+
+  useEffect(() => {
+    if (orderId && paymentIntentId && !called.current) {
+      called.current = true;
+      confirmPayment(orderId, paymentIntentId)
+        .then(() => setConfirmed(true))
+        .catch(() => setConfirmed(true)); // still show success even if confirm fails
+    } else {
+      setConfirmed(true);
+    }
+  }, [orderId, paymentIntentId]);
 
   return (
     <div style={styles.page}>
@@ -18,9 +33,11 @@ const OrderSuccess: React.FC = () => {
             Numéro de commande : <strong>#{orderId}</strong>
           </p>
         )}
-        <div style={styles.actions}>
-          <Link to="/products" style={styles.btnPrimary}>Continuer mes achats</Link>
-        </div>
+        {confirmed && (
+          <div style={styles.actions}>
+            <Link to="/products" style={styles.btnPrimary}>Continuer mes achats</Link>
+          </div>
+        )}
       </div>
     </div>
   );

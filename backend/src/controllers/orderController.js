@@ -1,5 +1,4 @@
 const Order = require('../models/Order');
-const { sendOrderConfirmation } = require('../services/emailService');
 
 exports.create = async (req, res) => {
   try {
@@ -10,14 +9,6 @@ exports.create = async (req, res) => {
       totalAmount,
       customerEmail: customerEmail || req.user.email
     });
-
-    // Envoyer l'email de confirmation après la création
-    try {
-      await sendOrderConfirmation(order.customerEmail, order._id);
-    } catch (emailErr) {
-      console.error('⚠️ Erreur Email:', emailErr.message);
-      // On ne bloque pas la réponse si l'email échoue
-    }
 
     res.status(201).json(order);
 

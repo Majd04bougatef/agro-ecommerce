@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({Key? key}) : super(key: key);
+  final VoidCallback? onLoginSuccess;
+  const AuthScreen({Key? key, this.onLoginSuccess}) : super(key: key);
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -30,6 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
         await ApiService.register(nameCtrl.text, emailCtrl.text, passwordCtrl.text, selectedRole);
       }
       if (mounted) {
+        widget.onLoginSuccess?.call();
         Navigator.pushReplacementNamed(context, '/');
       }
     } catch (e) {
