@@ -1,4 +1,118 @@
-# Agro E-Commerce
+# Agro E-Commerce - Guide de Démarrage (Windows)
+
+Bienvenue dans le projet Agro E-Commerce ! Ce guide est spécialement conçu pour t'aider à configurer et lancer le projet sur une machine **Windows**.
+
+## Prérequis
+Avant de commencer, assure-toi d'avoir installé les outils suivants sur ton PC :
+- [Git for Windows](https://git-scm.com/downloads) (pour cloner le repo)
+- [Docker Desktop pour Windows](https://www.docker.com/products/docker-desktop/) (pour lancer la base de données via docker-compose)
+- [Node.js](https://nodejs.org/) (version LTS recommandée)
+- [Flutter SDK & Android Studio](https://docs.flutter.dev/get-started/install/windows) (pour émuler et lancer l'application mobile)
+
+---
+
+## Étape 1 : Cloner le projet
+
+Ouvre ton terminal (Invite de commandes, PowerShell ou Git Bash) et exécute :
+
+```cmd
+git clone https://github.com/Majd04bougatef/agro-ecommerce.git
+cd agro-ecommerce
+```
+*(Remplace l'URL par l'URL exacte du dépôt GitHub)*
+
+---
+
+## Étape 2 : Lancer Docker (Services / Base de données)
+
+Avant de démarrer le code, il faut lancer les services Docker (comme la base de données).
+1. Assure-toi que l'application **Docker Desktop** est ouverte et tourne en arrière-plan.
+2. Dans le terminal à la racine du projet (`agro-ecommerce`), lance la commande :
+
+```cmd
+docker-compose up -d
+```
+*Pour vérifier que tout fonctionne : tape `docker ps`. Tu devrais voir les conteneurs en cours d'exécution.*
+
+---
+
+## Étape 3 : Lancer le Backend (API Node.js)
+
+Ouvre un nouveau terminal (laisse Docker tourner) et navigue dans le dossier backend :
+
+```cmd
+cd backend
+```
+
+1. **Installer les dépendances** :
+   ```cmd
+   npm install
+   ```
+2. **Démarrer le serveur backend** :
+   ```cmd
+   npm run dev
+   ```
+3. **Vérifier que ça marche** :
+   Ouvre ton navigateur et va sur : [http://localhost:8080](http://localhost:8080) (ou la route de base de l'API). Tu devrais recevoir une réponse JSON ou un message confirmant que le serveur tourne.
+4. **Faire les tests du backend** :
+   ```cmd
+   npm test
+   ```
+
+---
+
+## Étape 4 : Lancer le Frontend (Application React)
+
+Ouvre un **nouveau** terminal (laisse le backend tourner) et navigue dans le dossier frontend :
+
+```cmd
+cd frontend
+```
+
+1. **Installer les dépendances** :
+   ```cmd
+   npm install
+   ```
+2. **Démarrer le serveur web React** :
+   ```cmd
+   npm run dev
+   ```
+3. **Vérifier que ça marche** :
+   Ouvre ton navigateur sur : [http://localhost:3000](http://localhost:3000). Le site E-commerce devrait s'afficher correctement et se connecter au backend.
+4. **Faire les tests du frontend** :
+   ```cmd
+   npm test
+   ```
+   *(Si cela demande de fermer le mode interactif des tests, appuie sur `q`)*
+
+---
+
+## Étape 5 : Lancer l'Application Mobile (Flutter)
+
+Ouvre un **nouveau** terminal et navigue dans le dossier mobile :
+
+```cmd
+cd flutter_app
+```
+
+1. **Installer les packages** :
+   ```cmd
+   flutter pub get
+   ```
+2. **Lancer un émulateur Android** :
+   Ouvre **Android Studio** et lance un appareil virtuel (AVD) via le Device Manager, ou branche directement ton téléphone Android avec le débogage USB activé.
+3. **Démarrer l'application** :
+   Une fois l'émulateur allumé, lance :
+   ```cmd
+   flutter run
+   ```
+4. **Faire les tests de l'application mobile** :
+   ```cmd
+   flutter test
+   ```
+
+---
+Bon code ! 🚀# Agro E-Commerce
 
 Bienvenue dans le projet Agro E-Commerce. Ce projet contient un Backend (Node.js), un Frontend (React.js), et une application Mobile (Flutter).
 
